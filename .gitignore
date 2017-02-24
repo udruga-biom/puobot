@@ -1,3 +1,7 @@
+# puobot stuff
+output/
+input/
+
 # vim stuff
 *.swp
 
