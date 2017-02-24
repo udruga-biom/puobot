@@ -12,6 +12,7 @@ import re
 from datetime import datetime
 import os
 import sys
+from pyshorteners import Shortener
 
 # kreiranje output foldera za prvo pokretanje
 if 'output' not in os.listdir():
@@ -115,70 +116,72 @@ def puoscrape_alt(urlname):
 
     
 
-# PUO postupci
-print('tražim PUO postupke...')
+# # PUO postupci
+# print('tražim PUO postupke...')
+# 
+# 
+# url_puo = 'http://puo.mzoip.hr/hr/puo.html'
+# puo_tab = puoscrape(url_puo, 'puo')
+# 
+# # OPUO postupci
+# print('tražim OPUO postupke...')
+# 
+# url_opuo = 'http://puo.mzoip.hr/hr/opuo.html'
+# opuo_tab = puoscrape(url_opuo, 'opuo')
+# 
+# # prekogranični PUO postupci
+# print('tražim prekogranične PUO postupke...')
+# 
+# url_pg = 'http://puo.mzoip.hr/hr/puo/prekogranicni-postupci-procjene-utjecaja-zahvata-na-okolis.html'
+# puo_pg_tab = puoscrape_alt(url_pg)
+# 
+# # SPUO postupci, nadležan MZOIE
+# print('tražim SPUO postupke za koje je nadležno MZOIE...')
+# 
+# url_spuo = 'http://puo.mzoip.hr/hr/spuo.html'
+# url_spuo_min = 'http://puo.mzoip.hr/hr/spuo/postupci-strateske-procjene-nadlezno-tijelo-je-ministarstvo-zastite-okolisa-i-energetike.html'
+# spuo_min_tab = puoscrape_alt(url_spuo_min)
+# 
+# # SPUO postupci, prekogranični
+# print('tražim prekogranične SPUO postupke...')
+# 
+# url_spuo_pg = 'http://puo.mzoip.hr/hr/spuo/prekogranicni-postupci-strateske-procjene.html'
+# spuo_pg_tab = puoscrape_alt(url_spuo_pg)
+# 
+# # SPUO postupci, nadležno drugo središnje tijelo ili jedinice JLRS
+# print('tražim SPUO postupke za koje je nadležno drugo središnje tijelo ili JLRS...')
+# 
+# url_spuo_jlrs = 'http://puo.mzoip.hr/hr/spuo/postupci-strateske-procjene-nadlezno-tijelo-je-drugo-sredisnje-tijelo-drzavne-uprave-ili-jedinica-podrucne-regionalne-ili-lokalne-samouprave.html'
+# r = requests.get(url_spuo_jlrs)
+# soup = BeautifulSoup(r.content, 'lxml')
+# sadrzaj = soup.find_all('h2', text = re.compile('Postupci stra.*'))[0].parent.parent.find_all('ul')[1]
+# 
+# spuo_jlrs_tab = []
+# for i in sadrzaj.find_all('li'):
+#     zahvat = re.search('^(.*?)(Nadle.*?)http.*', i.text).group(1)
+#     nadlezan = re.search('^(.*?)(Nadle.*?)http.*', i.text).group(2)
+#     link = i.find('a')['href']
+#     spuo_jlrs_tab.append(zahvat + '\t' +
+#                          nadlezan + '\t' +
+#                          link)
+# 
+# # OSPUO postupci
+# print('tražim OSPUO postupke...')
+# 
+# url_ospuo = 'http://puo.mzoip.hr/hr/spuo/ocjena-o-potrebi-provedbe-strateske-procjene.html'
+# r = requests.get(url_ospuo)
+# soup = BeautifulSoup(r.content, 'lxml')
+# sadrzaj = soup.find_all('div', 'accordion')[1]
+# 
+# ospuo_tab = []
+# for i in sadrzaj.find_all('a'):
+#     link = i['href']
+#     tekst = i.parent.parent.parent.parent.find('h3').text.strip()
+#     ospuo_tab.append(tekst + '\t' + link)
+# 
+# puosave('output/puo-arhiva-git/')
 
-
-url_puo = 'http://puo.mzoip.hr/hr/puo.html'
-puo_tab = puoscrape(url_puo, 'puo')
-
-# OPUO postupci
-print('tražim OPUO postupke...')
-
-url_opuo = 'http://puo.mzoip.hr/hr/opuo.html'
-opuo_tab = puoscrape(url_opuo, 'opuo')
-
-# prekogranični PUO postupci
-print('tražim prekogranične PUO postupke...')
-
-url_pg = 'http://puo.mzoip.hr/hr/puo/prekogranicni-postupci-procjene-utjecaja-zahvata-na-okolis.html'
-puo_pg_tab = puoscrape_alt(url_pg)
-
-# SPUO postupci, nadležan MZOIE
-print('tražim SPUO postupke za koje je nadležno MZOIE...')
-
-url_spuo = 'http://puo.mzoip.hr/hr/spuo.html'
-url_spuo_min = 'http://puo.mzoip.hr/hr/spuo/postupci-strateske-procjene-nadlezno-tijelo-je-ministarstvo-zastite-okolisa-i-energetike.html'
-spuo_min_tab = puoscrape_alt(url_spuo_min)
-
-# SPUO postupci, prekogranični
-print('tražim prekogranične SPUO postupke...')
-
-url_spuo_pg = 'http://puo.mzoip.hr/hr/spuo/prekogranicni-postupci-strateske-procjene.html'
-spuo_pg_tab = puoscrape_alt(url_spuo_pg)
-
-# SPUO postupci, nadležno drugo središnje tijelo ili jedinice JLRS
-print('tražim SPUO postupke za koje je nadležno drugo središnje tijelo ili JLRS...')
-
-url_spuo_jlrs = 'http://puo.mzoip.hr/hr/spuo/postupci-strateske-procjene-nadlezno-tijelo-je-drugo-sredisnje-tijelo-drzavne-uprave-ili-jedinica-podrucne-regionalne-ili-lokalne-samouprave.html'
-r = requests.get(url_spuo_jlrs)
-soup = BeautifulSoup(r.content, 'lxml')
-sadrzaj = soup.find_all('h2', text = re.compile('Postupci stra.*'))[0].parent.parent.find_all('ul')[1]
-
-spuo_jlrs_tab = []
-for i in sadrzaj.find_all('li'):
-    zahvat = re.search('^(.*?)(Nadle.*?)http.*', i.text).group(1)
-    nadlezan = re.search('^(.*?)(Nadle.*?)http.*', i.text).group(2)
-    link = i.find('a')['href']
-    spuo_jlrs_tab.append(zahvat + '\t' +
-                         nadlezan + '\t' +
-                         link)
-
-# OSPUO postupci
-print('tražim OSPUO postupke...')
-
-url_ospuo = 'http://puo.mzoip.hr/hr/spuo/ocjena-o-potrebi-provedbe-strateske-procjene.html'
-r = requests.get(url_ospuo)
-soup = BeautifulSoup(r.content, 'lxml')
-sadrzaj = soup.find_all('div', 'accordion')[1]
-
-ospuo_tab = []
-for i in sadrzaj.find_all('a'):
-    link = i['href']
-    tekst = i.parent.parent.parent.parent.find('h3').text.strip()
-    ospuo_tab.append(tekst + '\t' + link)
-
-puosave('output/puo-arhiva-git/')
+puo_tab, puo_pg_tab, opuo_tab, spuo_min_tab, spuo_pg_tab, spuo_jlrs_tab, ospuo_tab = puoread('output/puo-arhiva-git/')
 
 # čitanje/pisanje arhive
 vrijeme = datetime.now()
@@ -216,7 +219,8 @@ diff= list(set(puo_tab) - set(puo_old)) +\
 for i in diff:
     dijelovi = i.split('\t')
     print(len(dijelovi))
-    print(i)
-
+    print(len(i))
+    for j in dijelovi:
+        print(j)
 # os.mkdir(arhiva_trenutni)
 # puosave(arhiva_trenutni)
