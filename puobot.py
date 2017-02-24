@@ -1,8 +1,10 @@
 """
-Puobot
+puobot
 Web robot koji radi katalog PUO i SPUO postupaka
 nadležnog ministarstva za zaštitu okoliša i prirode RH
 mzec 2017
+
+glavna skripta
 """
 
 # -*- coding: utf-8 -*-
@@ -118,7 +120,6 @@ def puoscrape_alt(urlname):
 # PUO postupci
 print('tražim PUO postupke...')
 
-
 url_puo = 'http://puo.mzoip.hr/hr/puo.html'
 puo_tab = puoscrape(url_puo, 'puo')
 
@@ -194,7 +195,7 @@ except OSError:
     puosave(arhiva_trenutni)
     sys.exit('prvo pokretanje, nema arhive, snimam snapshot u output/arhiva/' + stamp + '/')
 
-if arhiva_dir is None:
+if arhiva_dir is None or arhiva_dir == []:
     os.mkdir(arhiva_trenutni)
     puosave(arhiva_trenutni)
     sys.exit('prvo pokretanje, nema arhive, snimam snapshot u output/arhiva/' + stamp + '/')
@@ -203,20 +204,20 @@ if arhiva_dir is None:
 arhiva_zadnji = 'output/arhiva/' + arhiva_dir[0] + '/'
 puo_old, puo_pg_old, opuo_old, spuo_min_old, spuo_pg_old, spuo_jlrs_old, ospuo_old = puoread(arhiva_zadnji)
 
-# funkcija koja pronalazi razlike između _tab i _old varijabli
-diff = []
-diff= list(set(puo_tab) - set(puo_old)) +\
-      list(set(puo_pg_tab) - set(puo_pg_old)) +\
-      list(set(opuo_tab) - set(opuo_old)) +\
-      list(set(spuo_min_tab) - set(spuo_min_old)) +\
-      list(set(spuo_pg_tab) - set(spuo_pg_old)) +\
-      list(set(spuo_jlrs_tab) - set(spuo_jlrs_old)) +\
-      list(set(ospuo_tab) - set(ospuo_old))
+# # funkcija koja pronalazi razlike između _tab i _old varijabli
+# diff = []
+# diff= list(set(puo_tab) - set(puo_old)) +\
+#       list(set(puo_pg_tab) - set(puo_pg_old)) +\
+#       list(set(opuo_tab) - set(opuo_old)) +\
+#       list(set(spuo_min_tab) - set(spuo_min_old)) +\
+#       list(set(spuo_pg_tab) - set(spuo_pg_old)) +\
+#       list(set(spuo_jlrs_tab) - set(spuo_jlrs_old)) +\
+#       list(set(ospuo_tab) - set(ospuo_old))
+# 
+# for i in diff:
+#     dijelovi = i.split('\t')
+#     print(len(dijelovi))
+#     print(i)
 
-for i in diff:
-    dijelovi = i.split('\t')
-    print(len(dijelovi))
-    print(i)
-
-# os.mkdir(arhiva_trenutni)
-# puosave(arhiva_trenutni)
+os.mkdir(arhiva_trenutni)
+puosave(arhiva_trenutni)
