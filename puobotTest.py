@@ -220,9 +220,17 @@ diff= list(set(puo_tab) - set(puo_old)) +\
 
 for i in diff:
     dijelovi = i.split('\t')
-    print(len(dijelovi))
-    print(len(i))
-    for j in dijelovi:
-        print(j)
+    if len(dijelovi) == 5:
+        godina = dijelovi[0][:5]
+        kategorija = dijelovi[2]
+        ime_file = re.search('^(.*?) \[PDF\]', dijelovi[3]).group(1)
+        ime_file = ime_file[:57]
+        free_len = 140 - 5 - len(kategorija )- len(ime_file) - 20
+        ime_zahvat = dijelovi[1][:free_len]
+        
+    elif len (dijelovi == 3):
+    
+    elif len (dijelovi == 2): 
+    
 # os.mkdir(arhiva_trenutni)
 # puosave(arhiva_trenutni)
