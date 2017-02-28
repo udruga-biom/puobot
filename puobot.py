@@ -14,14 +14,24 @@ import re
 from datetime import datetime
 import os
 import sys
-import twython
+import argparse
 
-with open('input/twit_api_data.txt', 'r') as f:
-    twython_api_data = f.readlines()
-twitter = twython.Twython(twython_api_data[0].strip(),
-                          twython_api_data[1].strip(),
-                          twython_api_data[2].strip(),
-                          twython_api_data[3].strip())
+parser = argparse.ArgumentParser()
+parser.add_argument('--twitter', help = 'optional argument to update twitter')
+args = parser.parse_args()
+
+# provjera treba li baciti update na twitter:
+if args.twitter:
+    import twython
+    with open('input/twit_api_data.txt', 'r') as f:
+        twython_api_data = f.readlines()
+    twitter = twython.Twython(twython_api_data[0].strip(),
+                              twython_api_data[1].strip(),
+                              twython_api_data[2].strip(),
+                              twython_api_data[3].strip())
+    print('>> Twitter mode')
+else:
+    print('>> Twitterless mode')
 
 # kreiranje output foldera za prvo pokretanje
 if 'output' not in os.listdir():
@@ -212,7 +222,49 @@ if arhiva_dir is None or arhiva_dir == []:
 arhiva_zadnji = 'output/arhiva/' + arhiva_dir[0] + '/'
 puo_old, puo_pg_old, opuo_old, spuo_min_old, spuo_pg_old, spuo_jlrs_old, ospuo_old = puoread(arhiva_zadnji)
 
+# funkcija koja pronalazi razlike između _tab i _old varijabli
+diff = []
+diff= list(set(puo_tab) - set(puo_old)) +\
+      list(set(puo_pg_tab) - set(puo_pg_old)) +\
+      list(set(opuo_tab) - set(opuo_old)) +\
+      list(set(spuo_min_tab) - set(spuo_min_old)) +\
+      list(set(spuo_pg_tab) - set(spuo_pg_old)) +\
+      list(set(spuo_jlrs_tab) - set(spuo_jlrs_old)) +\
+      list(set(ospuo_tab) - set(ospuo_old))
 
+for i in diff:
+    pattern = re.compile('^(.*?) \[PDF\]')
+    dijelovi = i.split('\t')
+    if len(dijelovi) == 5:
+        godina = dijelovi[0][-5:-1]
+        kategorija = dijelovi[2]
+        if re.match(pattern, dijelovi[1]):
+            ime_file = re.search(pattern, dijelovi[1]).group(1)
+        else:
+            ime_file = dijelovi[1]
+        ime_file = ime_file[:57] + '...'
+        free_len = 140 - 3 - len(godina) - len(kategorija)- len(ime_file) - 25
+        ime_zahvat = dijelovi[1][:free_len]
+        update = godina + '-' + ime_zahvat + '-' + kategorija + '-' + ime_file + ' ' + link
+        link = dijelovi[4]
+    elif len(dijelovi) == 3:
+        if re.match(pattern, dijelovi[1]):
+            ime_file = re.search(pattern, dijelovi[1]).group(1)
+        else:
+            ime_file = dijelovi[1]
+        ime_file = ime_file[:57] + '...'
+        free_len = 140 - 1 - len(ime_file) - 24
+        ime_zahvat = dijelovi[0][:free_len]
+        update = ime_zahvat + '-' + ime_file + ' ' + link
+        link = dijelovi[2]
+    elif len(dijelovi) == 2:
+        ime_zahvata = dijelovi[0][:110]
+        link = dijelovi[1]
+        update = ime_zahvata + ' ' + link
+    print(update)
+    if args.twitter:
+        twitter.update_status(status = update)
+    print(len(update))
 
 os.mkdir(arhiva_trenutni)
 puosave(arhiva_trenutni)

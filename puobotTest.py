@@ -229,7 +229,7 @@ for i in diff:
         else:
             ime_file = dijelovi[1]
         ime_file = ime_file[:57] + '...'
-        free_len = 140 - 3 - len(godina) - len(kategorija)- len(ime_file)
+        free_len = 140 - 3 - len(godina) - len(kategorija)- len(ime_file) - 24
         ime_zahvat = dijelovi[1][:free_len]
         update = godina + '-' + ime_zahvat + '-' + kategorija + '-' + ime_file
         link = dijelovi[4]
@@ -239,7 +239,7 @@ for i in diff:
         else:
             ime_file = dijelovi[1]
         ime_file = ime_file[:57] + '...'
-        free_len = 140 - 1 - len(ime_file)
+        free_len = 140 - 1 - len(ime_file) - 24
         ime_zahvat = dijelovi[0][:free_len]
         update = ime_zahvat + '-' + ime_file
         link = dijelovi[2]
