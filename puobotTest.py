@@ -219,10 +219,36 @@ diff= list(set(puo_tab) - set(puo_old)) +\
       list(set(ospuo_tab) - set(ospuo_old))
 
 for i in diff:
+    pattern = re.compile('^(.*?) \[PDF\]')
     dijelovi = i.split('\t')
-    print(len(dijelovi))
-    print(len(i))
-    for j in dijelovi:
-        print(j)
+    if len(dijelovi) == 5:
+        godina = dijelovi[0][-5:-1]
+        kategorija = dijelovi[2]
+        if re.match(pattern, dijelovi[1]):
+            ime_file = re.search(pattern, dijelovi[1]).group(1)
+        else:
+            ime_file = dijelovi[1]
+        ime_file = ime_file[:57] + '...'
+        free_len = 140 - 3 - len(godina) - len(kategorija)- len(ime_file) - 24
+        ime_zahvat = dijelovi[1][:free_len]
+        update = godina + '-' + ime_zahvat + '-' + kategorija + '-' + ime_file
+        link = dijelovi[4]
+    elif len(dijelovi) == 3:
+        if re.match(pattern, dijelovi[1]):
+            ime_file = re.search(pattern, dijelovi[1]).group(1)
+        else:
+            ime_file = dijelovi[1]
+        ime_file = ime_file[:57] + '...'
+        free_len = 140 - 1 - len(ime_file) - 24
+        ime_zahvat = dijelovi[0][:free_len]
+        update = ime_zahvat + '-' + ime_file
+        link = dijelovi[2]
+    elif len(dijelovi) == 2:
+        ime_zahvata = dijelovi[0][:140]
+        update = ime_zahvata
+        link = dijelovi[1]
+    print(update)
+    print(len(update))
+    print(link)
 # os.mkdir(arhiva_trenutni)
 # puosave(arhiva_trenutni)
