@@ -95,12 +95,12 @@ def puoscrape(urlname, postupak='puo'):
         r = requests.get(url_g)
         soup = BeautifulSoup(r.content, 'lxml')
         sadrzaj = soup.find_all('div', 'accordion')[0]
-        zahvat_imena = sadrzaj.find_all('h3', recursive=False)
-        zahvat_kategorija = sadrzaj.find_all('div', recursive=False)
-        if len(zahvat_imena) != len(zahvat_kategorija):
+        zahvat_ime = sadrzaj.find_all('h3', recursive=False)
+        zahvat_kat = sadrzaj.find_all('div', recursive=False)
+        if len(zahvat_ime) != len(zahvat_kat):
             print('broj zahvata i kategorija se ne podudara')
         else:
-            for ime, zahvacena_kategorija in zip(zahvat_imena, zahvat_kategorija):
+            for ime, zahvacena_kategorija in zip(zahvat_ime, zahvat_kat):
                 kategorije = zahvacena_kategorija.find_all('h3')
                 for kat_index, kategorija in enumerate(kategorije):
                     linkovi = (zahvacena_kategorija
@@ -120,15 +120,15 @@ def puoscrape_alt(urlname):
     soup = BeautifulSoup(r.content, 'lxml')
     output = []
     sadrzaj = soup.find_all('div', 'accordion')[0]
-    zahvat_ime = sadrzaj.find_all('h3', recursive = False)
-    zahvat_kat = sadrzaj.find_all('div', recursive = False)
-    for zahvat in range(len(zahvat_ime)):
-        linkovi = zahvat_kat[zahvat].find_all('a')
-        for linak in range(len(linkovi)):
-            output.append(zahvat_ime[zahvat].text.strip() + '\t' +
-                              linkovi[linak].text.strip() + '\t' +
-                              linkovi[linak]['href'])
-    return(output)
+    zahvat_ime = sadrzaj.find_all('h3', recursive=False)
+    zahvat_kat = sadrzaj.find_all('div', recursive=False)
+    for ime, kategorija in zip(zahvat_ime, zahvat_kat):
+        linkovi = kategorija.find_all('a')
+        for linak in linkovi:
+            output.append(ime.text.strip() + '\t' +
+                          linak.text.strip() + '\t' +
+                          linak['href'])
+    return output
 
 
 
