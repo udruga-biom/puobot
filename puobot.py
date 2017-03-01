@@ -3,8 +3,7 @@ puobot
 Web robot koji radi katalog PUO i SPUO postupaka
 nadležnog ministarstva za zaštitu okoliša i prirode RH
 mzec 2017
-
-glavna skripta
+v 0.1
 """
 
 # -*- coding: utf-8 -*-
@@ -245,8 +244,8 @@ for i in diff:
         ime_file = ime_file[:57] + '...'
         free_len = 140 - 3 - len(godina) - len(kategorija)- len(ime_file) - 25
         ime_zahvat = dijelovi[1][:free_len]
-        update = godina + '-' + ime_zahvat + '-' + kategorija + '-' + ime_file + ' ' + link
         link = dijelovi[4]
+        update = godina + '-' + ime_zahvat + '-' + kategorija + '-' + ime_file + ' ' + link
     elif len(dijelovi) == 3:
         if re.match(pattern, dijelovi[1]):
             ime_file = re.search(pattern, dijelovi[1]).group(1)
@@ -255,8 +254,8 @@ for i in diff:
         ime_file = ime_file[:57] + '...'
         free_len = 140 - 1 - len(ime_file) - 24
         ime_zahvat = dijelovi[0][:free_len]
-        update = ime_zahvat + '-' + ime_file + ' ' + link
         link = dijelovi[2]
+        update = ime_zahvat + '-' + ime_file + ' ' + link
     elif len(dijelovi) == 2:
         ime_zahvata = dijelovi[0][:110]
         link = dijelovi[1]
