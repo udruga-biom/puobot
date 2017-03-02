@@ -205,7 +205,7 @@ if arhiva_dir is None or arhiva_dir == []:
     sys.exit('prvo pokretanje, nema arhive, snimam snapshot u output/arhiva/' + stamp + '/')
 
 # ako postoji arhiva, usporedba trenutne i posljednje verzije
-arhiva_zadnji = 'output/arhiva/' + arhiva_dir[-1] + '/'
+arhiva_zadnji = 'output/arhiva/' + arhiva_dir[0] + '/'
 puo_old = puoread(arhiva_zadnji, 'puo')
 puo_pg_old = puoread(arhiva_zadnji, 'puo_pg')
 opuo_old = puoread(arhiva_zadnji, 'opuo')
