@@ -7,13 +7,13 @@ v 0.1
 """
 
 # -*- coding: utf-8 -*-
-import requests
-from bs4 import BeautifulSoup
-import re
+import argparse
 from datetime import datetime
 import os
+import re
 import sys
-import argparse
+import requests
+from bs4 import BeautifulSoup
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--twitter', help = 'optional argument to update twitter')
@@ -75,46 +75,44 @@ def puoread(read_dir):
     return(puo, puo_pg, opuo, spuo_min, spuo_pg, spuo_jlrs, ospuo)
 
 # funkcija za parse PUO/OPUO
-def puoscrape(urlname, postupak = 'puo'):
+def puoscrape(urlname, postupak='puo'):
     r = requests.get(urlname)
-    
+
     url = 'http://puo.mzoip.hr'
     if postupak == 'puo':
         pattern = re.compile('PUO postupci 2[0-9]{3}')
     elif postupak == 'opuo':
         pattern = re.compile('OPUO postupci 2[0-9]{3}')
-    
+
     soup = BeautifulSoup(r.content, 'lxml')
-    link_elem = soup.find_all('div', 'four mobile-four columns')[2]\
-                    .find_all('a', text = pattern)
-    
+    link_elem = (soup.find_all('div', 'four mobile-four columns')[2]
+                     .find_all('a', text=pattern))
+
     output = []
-    for godina in range(len(link_elem)):
-        print(link_elem[godina].text.strip())
-        url_g = url + link_elem[godina]['href']
+    for godina in link_elem:
+        print(godina.text.strip())
+        url_g = url + godina['href']
         r = requests.get(url_g)
         soup = BeautifulSoup(r.content, 'lxml')
         sadrzaj = soup.find_all('div', 'accordion')[0]
-        zahvat_ime = sadrzaj.find_all('h3', recursive = False)
-        zahvat_kat = sadrzaj.find_all('div', recursive = False)
+        zahvat_ime = sadrzaj.find_all('h3', recursive=False)
+        zahvat_kat = sadrzaj.find_all('div', recursive=False)
         if len(zahvat_ime) != len(zahvat_kat):
             print('broj zahvata i kategorija se ne podudara')
         else:
-            n_zahvata = len(zahvat_ime)
-            for zahvat in range(n_zahvata):
-                naziv = zahvat_ime[zahvat]
-                kategorije = zahvat_kat[zahvat].find_all('h3')
-                for kategorija in range(len(kategorije)):
-                    linkovi = zahvat_kat[zahvat]\
-                            .find_all('ul', 'docs')[kategorija]\
-                            .find_all('a')
-                    for linak in range(len(linkovi)):
-                        output.append(link_elem[godina].text.strip() + '\t' +
-                                      zahvat_ime[zahvat].text.strip() + '\t' +
-                                      kategorije[kategorija].text.strip() + '\t' +
-                                      linkovi[linak].text.strip() + '\t' +
-                                      linkovi[linak]['href'])
-    return(output)
+            for ime, zahvacena_kategorija in zip(zahvat_ime, zahvat_kat):
+                kategorije = zahvacena_kategorija.find_all('h3')
+                for kat_index, kategorija in enumerate(kategorije):
+                    linkovi = (zahvacena_kategorija
+                               .find_all('ul', 'docs')[kat_index]
+                               .find_all('a'))
+                    for linak in linkovi:
+                        output.append(godina.text.strip() + '\t' +
+                                      ime.text.strip() + '\t' +
+                                      kategorija.text.strip() + '\t' +
+                                      linak.text.strip() + '\t' +
+                                      linak['href'])
+    return output
 
 # funkcija za parse SPUO i prekograničnih postupaka
 def puoscrape_alt(urlname):
@@ -122,17 +120,17 @@ def puoscrape_alt(urlname):
     soup = BeautifulSoup(r.content, 'lxml')
     output = []
     sadrzaj = soup.find_all('div', 'accordion')[0]
-    zahvat_ime = sadrzaj.find_all('h3', recursive = False)
-    zahvat_kat = sadrzaj.find_all('div', recursive = False)
-    for zahvat in range(len(zahvat_ime)):
-        linkovi = zahvat_kat[zahvat].find_all('a')
-        for linak in range(len(linkovi)):
-            output.append(zahvat_ime[zahvat].text.strip() + '\t' +
-                              linkovi[linak].text.strip() + '\t' +
-                              linkovi[linak]['href'])
-    return(output)
+    zahvat_ime = sadrzaj.find_all('h3', recursive=False)
+    zahvat_kat = sadrzaj.find_all('div', recursive=False)
+    for ime, kategorija in zip(zahvat_ime, zahvat_kat):
+        linkovi = kategorija.find_all('a')
+        for linak in linkovi:
+            output.append(ime.text.strip() + '\t' +
+                          linak.text.strip() + '\t' +
+                          linak['href'])
+    return output
 
-    
+
 
 # PUO postupci
 print('tražim PUO postupke...')
