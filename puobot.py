@@ -57,22 +57,11 @@ def puosave(save_dir):
     with open(save_dir + 'ospuo.tsv', 'w') as f:
         f.write('\n'.join(ospuo_tab))
 
-def puoread(read_dir):
-    with open(read_dir + 'puo.tsv', 'r') as f:
-        puo = f.read().splitlines()
-    with open(read_dir + 'puo_pg.tsv', 'r') as f:
-        puo_pg = f.read().splitlines()
-    with open(read_dir + 'opuo.tsv', 'r') as f:
-        opuo = f.read().splitlines()
-    with open(read_dir + 'spuo_min.tsv', 'r') as f:
-        spuo_min = f.read().splitlines()
-    with open(read_dir + 'spuo_pg.tsv', 'r') as f:
-        spuo_pg = f.read().splitlines()
-    with open(read_dir + 'spuo_jlrs.tsv', 'r') as f:
-        spuo_jlrs = f.read().splitlines()
-    with open(read_dir + 'ospuo.tsv', 'r') as f:
-        ospuo = f.read().splitlines()
-    return(puo, puo_pg, opuo, spuo_min, spuo_pg, spuo_jlrs, ospuo)
+def puoread(read_dir, file):
+    with open(read_dir + file + '.tsv', 'r') as f:
+        in_file = f.read().splitlines()
+    return in_file
+
 
 # funkcija za parse PUO/OPUO
 def puoscrape(urlname, postupak='puo'):
@@ -217,7 +206,13 @@ if arhiva_dir is None or arhiva_dir == []:
 
 # ako postoji arhiva, usporedba trenutne i posljednje verzije
 arhiva_zadnji = 'output/arhiva/' + arhiva_dir[-1] + '/'
-puo_old, puo_pg_old, opuo_old, spuo_min_old, spuo_pg_old, spuo_jlrs_old, ospuo_old = puoread(arhiva_zadnji)
+puo_old = puoread(arhiva_zadnji, 'puo')
+puo_pg_old = puoread(arhiva_zadnji, 'puo_pg')
+opuo_old = puoread(arhiva_zadnji, 'opuo')
+spuo_min_old = puoread(arhiva_zadnji, 'spuo_min')
+spuo_pg_old = puoread(arhiva_zadnji, 'spuo_pg')
+spuo_jlrs_old = puoread(arhiva_zadnji, 'spuo_jlrs')
+ospuo_old = puoread(arhiva_zadnji, 'ospuo')
 
 # funkcija koja pronalazi razlike između _tab i _old varijabli
 diff = []
@@ -225,7 +220,7 @@ tabovi = [puo_tab, puo_pg_tab, opuo_tab, spuo_min_tab, spuo_pg_tab, spuo_jlrs_ta
 oldies = [puo_old, puo_pg_old, opuo_old, spuo_min_old, spuo_pg_old, spuo_jlrs_old, ospuo_old]
 for tab, old in zip(tabovi, oldies):
     razlika = list(set(tab) - set(old))
-    diff.append(razlika)
+    diff.extend(razlika)
 
 
 for i in diff:
