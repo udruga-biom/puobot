@@ -169,7 +169,7 @@ print('tražim SPUO postupke za koje je nadležno drugo središnje tijelo ili JL
 url_spuo_jlrs = 'http://puo.mzoip.hr/hr/spuo/postupci-strateske-procjene-nadlezno-tijelo-je-drugo-sredisnje-tijelo-drzavne-uprave-ili-jedinica-podrucne-regionalne-ili-lokalne-samouprave.html'
 r = requests.get(url_spuo_jlrs)
 soup = BeautifulSoup(r.content, 'lxml')
-sadrzaj = soup.find_all('h2', text = re.compile('Postupci stra.*'))[0].parent.parent.find_all('ul')[1]
+sadrzaj = soup.find_all('h2', text=re.compile('Postupci stra.*'))[0].parent.parent.find_all('ul')[1]
 
 spuo_jlrs_tab = []
 for i in sadrzaj.find_all('li'):
@@ -204,7 +204,7 @@ arhiva_trenutni = 'output/arhiva/' + stamp + '/'
 
 try:
     arhiva_dir = os.listdir('output/arhiva/')
-    arhiva_dir.sort(reverse = True)
+    arhiva_dir.sort(reverse=True)
 except OSError:
     os.mkdir(arhiva_trenutni)
     puosave(arhiva_trenutni)
@@ -216,18 +216,17 @@ if arhiva_dir is None or arhiva_dir == []:
     sys.exit('prvo pokretanje, nema arhive, snimam snapshot u output/arhiva/' + stamp + '/')
 
 # ako postoji arhiva, usporedba trenutne i posljednje verzije
-arhiva_zadnji = 'output/arhiva/' + arhiva_dir[0] + '/'
+arhiva_zadnji = 'output/arhiva/' + arhiva_dir[-1] + '/'
 puo_old, puo_pg_old, opuo_old, spuo_min_old, spuo_pg_old, spuo_jlrs_old, ospuo_old = puoread(arhiva_zadnji)
 
 # funkcija koja pronalazi razlike između _tab i _old varijabli
 diff = []
-diff= list(set(puo_tab) - set(puo_old)) +\
-      list(set(puo_pg_tab) - set(puo_pg_old)) +\
-      list(set(opuo_tab) - set(opuo_old)) +\
-      list(set(spuo_min_tab) - set(spuo_min_old)) +\
-      list(set(spuo_pg_tab) - set(spuo_pg_old)) +\
-      list(set(spuo_jlrs_tab) - set(spuo_jlrs_old)) +\
-      list(set(ospuo_tab) - set(ospuo_old))
+tabovi = [puo_tab, puo_pg_tab, opuo_tab, spuo_min_tab, spuo_pg_tab, spuo_jlrs_tab, ospuo_tab]
+oldies = [puo_old, puo_pg_old, opuo_old, spuo_min_old, spuo_pg_old, spuo_jlrs_old, ospuo_old]
+for tab, old in zip(tabovi, oldies):
+    razlika = list(set(tab) - set(old))
+    diff.append(razlika)
+
 
 for i in diff:
     pattern = re.compile('^(.*?) \[PDF\]')
@@ -260,7 +259,7 @@ for i in diff:
         update = ime_zahvata + ' ' + link
     print(update)
     if args.twitter:
-        twitter.update_status(status = update)
+        twitter.update_status(status=update)
     print(len(update))
 
 os.mkdir(arhiva_trenutni)
