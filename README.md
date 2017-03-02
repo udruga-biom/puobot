@@ -6,7 +6,7 @@ puobot je web robot koji radi katalog PUO i SPUO postupaka nadležnog ministarst
 
 ### Problem
 
-Dokumenti o postupcima procjene utjecaja na okoliš na web stranici [nadležnog ministarstva za zaštitu okoliša i prirode](puo.mzoip.hr) se dodaju na način da je nemoguće sustavno i redovito pratiti objave novih dokumenata.
+Dokumenti o postupcima procjene utjecaja na okoliš na web stranici [nadležnog ministarstva za zaštitu okoliša i prirode](http://puo.mzoip.hr/) se dodaju na način da je nemoguće sustavno i redovito pratiti objave novih dokumenata.
 
 ### Rješenje
 
