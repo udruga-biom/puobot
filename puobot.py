@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 """
 puobot
 Web robot koji radi katalog PUO i SPUO postupaka
@@ -6,7 +8,6 @@ mzec 2017
 v 0.1
 """
 
-# -*- coding: utf-8 -*-
 import argparse
 from datetime import datetime
 import os
@@ -257,5 +258,6 @@ for i in diff:
         twitter.update_status(status=update)
     print(len(update))
 
-os.mkdir(arhiva_trenutni)
+if stamp not in os.listdir('output/arhiva/'):
+    os.mkdir(arhiva_trenutni)
 puosave(arhiva_trenutni)
