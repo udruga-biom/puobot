@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 """
 puobot
 Web robot koji radi katalog PUO i SPUO postupaka
@@ -6,7 +8,6 @@ mzec 2017
 v 0.1
 """
 
-# -*- coding: utf-8 -*-
 import argparse
 from datetime import datetime
 import os
@@ -57,22 +58,11 @@ def puosave(save_dir):
     with open(save_dir + 'ospuo.tsv', 'w') as f:
         f.write('\n'.join(ospuo_tab))
 
-def puoread(read_dir):
-    with open(read_dir + 'puo.tsv', 'r') as f:
-        puo = f.read().splitlines()
-    with open(read_dir + 'puo_pg.tsv', 'r') as f:
-        puo_pg = f.read().splitlines()
-    with open(read_dir + 'opuo.tsv', 'r') as f:
-        opuo = f.read().splitlines()
-    with open(read_dir + 'spuo_min.tsv', 'r') as f:
-        spuo_min = f.read().splitlines()
-    with open(read_dir + 'spuo_pg.tsv', 'r') as f:
-        spuo_pg = f.read().splitlines()
-    with open(read_dir + 'spuo_jlrs.tsv', 'r') as f:
-        spuo_jlrs = f.read().splitlines()
-    with open(read_dir + 'ospuo.tsv', 'r') as f:
-        ospuo = f.read().splitlines()
-    return(puo, puo_pg, opuo, spuo_min, spuo_pg, spuo_jlrs, ospuo)
+def puoread(read_dir, file):
+    with open(read_dir + file + '.tsv', 'r') as f:
+        in_file = f.read().splitlines()
+    return in_file
+
 
 # funkcija za parse PUO/OPUO
 def puoscrape(urlname, postupak='puo'):
@@ -169,7 +159,7 @@ print('tražim SPUO postupke za koje je nadležno drugo središnje tijelo ili JL
 url_spuo_jlrs = 'http://puo.mzoip.hr/hr/spuo/postupci-strateske-procjene-nadlezno-tijelo-je-drugo-sredisnje-tijelo-drzavne-uprave-ili-jedinica-podrucne-regionalne-ili-lokalne-samouprave.html'
 r = requests.get(url_spuo_jlrs)
 soup = BeautifulSoup(r.content, 'lxml')
-sadrzaj = soup.find_all('h2', text = re.compile('Postupci stra.*'))[0].parent.parent.find_all('ul')[1]
+sadrzaj = soup.find_all('h2', text=re.compile('Postupci stra.*'))[0].parent.parent.find_all('ul')[1]
 
 spuo_jlrs_tab = []
 for i in sadrzaj.find_all('li'):
@@ -204,7 +194,7 @@ arhiva_trenutni = 'output/arhiva/' + stamp + '/'
 
 try:
     arhiva_dir = os.listdir('output/arhiva/')
-    arhiva_dir.sort(reverse = True)
+    arhiva_dir.sort(reverse=True)
 except OSError:
     os.mkdir(arhiva_trenutni)
     puosave(arhiva_trenutni)
@@ -217,17 +207,22 @@ if arhiva_dir is None or arhiva_dir == []:
 
 # ako postoji arhiva, usporedba trenutne i posljednje verzije
 arhiva_zadnji = 'output/arhiva/' + arhiva_dir[0] + '/'
-puo_old, puo_pg_old, opuo_old, spuo_min_old, spuo_pg_old, spuo_jlrs_old, ospuo_old = puoread(arhiva_zadnji)
+puo_old = puoread(arhiva_zadnji, 'puo')
+puo_pg_old = puoread(arhiva_zadnji, 'puo_pg')
+opuo_old = puoread(arhiva_zadnji, 'opuo')
+spuo_min_old = puoread(arhiva_zadnji, 'spuo_min')
+spuo_pg_old = puoread(arhiva_zadnji, 'spuo_pg')
+spuo_jlrs_old = puoread(arhiva_zadnji, 'spuo_jlrs')
+ospuo_old = puoread(arhiva_zadnji, 'ospuo')
 
 # funkcija koja pronalazi razlike između _tab i _old varijabli
 diff = []
-diff= list(set(puo_tab) - set(puo_old)) +\
-      list(set(puo_pg_tab) - set(puo_pg_old)) +\
-      list(set(opuo_tab) - set(opuo_old)) +\
-      list(set(spuo_min_tab) - set(spuo_min_old)) +\
-      list(set(spuo_pg_tab) - set(spuo_pg_old)) +\
-      list(set(spuo_jlrs_tab) - set(spuo_jlrs_old)) +\
-      list(set(ospuo_tab) - set(ospuo_old))
+tabovi = [puo_tab, puo_pg_tab, opuo_tab, spuo_min_tab, spuo_pg_tab, spuo_jlrs_tab, ospuo_tab]
+oldies = [puo_old, puo_pg_old, opuo_old, spuo_min_old, spuo_pg_old, spuo_jlrs_old, ospuo_old]
+for tab, old in zip(tabovi, oldies):
+    razlika = list(set(tab) - set(old))
+    diff.extend(razlika)
+
 
 for i in diff:
     pattern = re.compile('^(.*?) \[PDF\]')
@@ -260,8 +255,9 @@ for i in diff:
         update = ime_zahvata + ' ' + link
     print(update)
     if args.twitter:
-        twitter.update_status(status = update)
+        twitter.update_status(status=update)
     print(len(update))
 
-os.mkdir(arhiva_trenutni)
+if stamp not in os.listdir('output/arhiva/'):
+    os.mkdir(arhiva_trenutni)
 puosave(arhiva_trenutni)
