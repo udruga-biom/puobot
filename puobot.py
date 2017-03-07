@@ -97,11 +97,10 @@ def puoscrape(urlname, postupak='puo'):
                                .find_all('ul', 'docs')[kat_index]
                                .find_all('a'))
                     for linak in linkovi:
-                        output.append(godina.text.strip() + '\t' +
-                                      ime.text.strip() + '\t' +
-                                      kategorija.text.strip() + '\t' +
-                                      linak.text.strip() + '\t' +
-                                      linak['href'])
+                        polja = [polje.text.strip() for polje in
+                                 [godina, ime, kategorija, linak]]
+                        polja.append(linak['href'])
+                        output.append('\t'.join(polja))
     return output
 
 # funkcija za parse SPUO i prekograničnih postupaka
@@ -115,9 +114,8 @@ def puoscrape_alt(urlname):
     for ime, kategorija in zip(zahvat_ime, zahvat_kat):
         linkovi = kategorija.find_all('a')
         for linak in linkovi:
-            output.append(ime.text.strip() + '\t' +
-                          linak.text.strip() + '\t' +
-                          linak['href'])
+            polja = [ime.text.strip(), linak.text.strip(), linak['href']]
+            output.append('\t'.join(polja))
     return output
 
 
@@ -166,9 +164,7 @@ for i in sadrzaj.find_all('li'):
     zahvat = re.search('^(.*?)(Nadle.*?)http.*', i.text).group(1)
     nadlezan = re.search('^(.*?)(Nadle.*?)http.*', i.text).group(2)
     link = i.find('a')['href']
-    spuo_jlrs_tab.append(zahvat + '\t' +
-                         nadlezan + '\t' +
-                         link)
+    spuo_jlrs_tab.append('\t'.join([zahvat, nadlezan, link]))
 
 # OSPUO postupci
 print('tražim OSPUO postupke...')
@@ -182,7 +178,7 @@ ospuo_tab = []
 for i in sadrzaj.find_all('a'):
     link = i['href']
     tekst = i.parent.parent.parent.parent.find('h3').text.strip()
-    ospuo_tab.append(tekst + '\t' + link)
+    ospuo_tab.append('\t'.join([tekst, link]))
 
 puosave('output/puo-arhiva-git/')
 
@@ -194,6 +190,7 @@ arhiva_trenutni = 'output/arhiva/' + stamp + '/'
 
 arhiva_dir = os.listdir('output/arhiva/')
 if not arhiva_dir:
+    os.mkdir(arhiva_trenutni)
     puosave(arhiva_trenutni)
     sys.exit('prvo pokretanje, nema arhive, snimam snapshot u ' + arhiva_trenutni)
 
@@ -230,7 +227,7 @@ for i in diff:
         free_len = 140 - 3 - len(godina) - len(kategorija)- len(ime_file) - 25
         ime_zahvat = dijelovi[1][:free_len]
         link = dijelovi[4]
-        update = godina + '-' + ime_zahvat + '-' + kategorija + '-' + ime_file + ' ' + link
+        update = '-'.join([godina, ime_zahvat, kategorija, ime_file]) + ' ' + link
     elif len(dijelovi) == 3:
         if re.match(pattern, dijelovi[1]):
             ime_file = re.search(pattern, dijelovi[1]).group(1)
@@ -244,7 +241,7 @@ for i in diff:
     elif len(dijelovi) == 2:
         ime_zahvata = dijelovi[0][:110]
         link = dijelovi[1]
-        update = ime_zahvata + ' ' + link
+        update = ' '.join([ime_zahvata, link])
     print(update)
     if args.twitter:
         twitter.update_status(status=update)
