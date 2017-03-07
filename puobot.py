@@ -190,6 +190,8 @@ stamp = vrijeme.strftime('%Y-%m-%d-%H-%M')
 arhiva_trenutni = 'output/arhiva/' + stamp + '/'
 
 arhiva_dir = os.listdir('output/arhiva/')
+arhiva_dir.sort()
+
 if not arhiva_dir:
     os.mkdir(arhiva_trenutni)
     puosave(arhiva_trenutni)
@@ -212,7 +214,6 @@ oldies = [puo_old, puo_pg_old, opuo_old, spuo_min_old, spuo_pg_old, spuo_jlrs_ol
 for tab, old in zip(tabovi, oldies):
     razlika = list(set(tab) - set(old))
     diff.extend(razlika)
-
 
 for i in diff:
     pattern = re.compile('^(.*?) \[PDF\]')
