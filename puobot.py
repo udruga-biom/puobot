@@ -192,21 +192,13 @@ stamp = vrijeme.strftime('%Y-%m-%d-%H-%M')
 
 arhiva_trenutni = 'output/arhiva/' + stamp + '/'
 
-try:
-    arhiva_dir = os.listdir('output/arhiva/')
-    arhiva_dir.sort(reverse=True)
-except OSError:
-    os.mkdir(arhiva_trenutni)
+arhiva_dir = os.listdir('output/arhiva/')
+if not arhiva_dir:
     puosave(arhiva_trenutni)
-    sys.exit('prvo pokretanje, nema arhive, snimam snapshot u output/arhiva/' + stamp + '/')
-
-if arhiva_dir is None or arhiva_dir == []:
-    os.mkdir(arhiva_trenutni)
-    puosave(arhiva_trenutni)
-    sys.exit('prvo pokretanje, nema arhive, snimam snapshot u output/arhiva/' + stamp + '/')
+    sys.exit('prvo pokretanje, nema arhive, snimam snapshot u ' + arhiva_trenutni)
 
 # ako postoji arhiva, usporedba trenutne i posljednje verzije
-arhiva_zadnji = 'output/arhiva/' + arhiva_dir[0] + '/'
+arhiva_zadnji = 'output/arhiva/' + arhiva_dir[-1] + '/'
 puo_old = puoread(arhiva_zadnji, 'puo')
 puo_pg_old = puoread(arhiva_zadnji, 'puo_pg')
 opuo_old = puoread(arhiva_zadnji, 'opuo')
