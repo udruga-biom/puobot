@@ -189,7 +189,7 @@ stamp = vrijeme.strftime('%Y-%m-%d-%H-%M')
 
 arhiva_trenutni = 'output/arhiva/' + stamp + '/'
 
-arhiva_dir = os.listdir('output/arhiva/')
+arhiva_dir = sorted(os.listdir('output/arhiva/'))
 if not arhiva_dir:
     os.mkdir(arhiva_trenutni)
     puosave(arhiva_trenutni)
