@@ -161,8 +161,9 @@ sadrzaj = soup.find_all('h2', text=re.compile('Postupci stra.*'))[0].parent.pare
 
 spuo_jlrs_tab = []
 for i in sadrzaj.find_all('li'):
-    zahvat = re.search('^(.*?)(Nadle.*?)http.*', i.text).group(1)
-    nadlezan = re.search('^(.*?)(Nadle.*?)http.*', i.text).group(2)
+    trazenje = re.search('^(.*?)(Nadle.*?)http.*', i.text)
+    zahvat = trazenje.group(1)
+    nadlezan = trazenje.group(2)
     link = i.find('a')['href']
     spuo_jlrs_tab.append('\t'.join([zahvat, nadlezan, link]))
 
