@@ -133,11 +133,17 @@ puo_tab = trazenje('puo')
 opuo_tab = trazenje('opuo')
 
 
-# prekogranični PUO postupci
-print('tražim prekogranične PUO postupke...')
+def trazenje_prekogranicnih(url):
+    postupak = url.split('/')[0]
+    print('tražim prekogranične {} postupke...'.format(postupak.upper()))
+    return puoscrape_alt(BASE_URL + url)
 
-url_pg = BASE_URL + 'puo/prekogranicni-postupci-procjene-utjecaja-zahvata-na-okolis.html'
-puo_pg_tab = puoscrape_alt(url_pg)
+# prekogranični PUO postupci
+puo_pg_tab = trazenje_prekogranicnih('puo/prekogranicni-postupci-procjene-utjecaja-zahvata-na-okolis.html')
+
+# SPUO postupci, prekogranični
+spuo_pg_tab = trazenje_prekogranicnih('spuo/prekogranicni-postupci-strateske-procjene.html')
+
 
 # SPUO postupci, nadležan MZOIE
 print('tražim SPUO postupke za koje je nadležno MZOIE...')
@@ -146,11 +152,6 @@ url_spuo = BASE_URL + 'spuo.html'
 url_spuo_min = BASE_URL + 'spuo/postupci-strateske-procjene-nadlezno-tijelo-je-ministarstvo-zastite-okolisa-i-energetike.html'
 spuo_min_tab = puoscrape_alt(url_spuo_min)
 
-# SPUO postupci, prekogranični
-print('tražim prekogranične SPUO postupke...')
-
-url_spuo_pg = BASE_URL + 'spuo/prekogranicni-postupci-strateske-procjene.html'
-spuo_pg_tab = puoscrape_alt(url_spuo_pg)
 
 # SPUO postupci, nadležno drugo središnje tijelo ili jedinice JLRS
 print('tražim SPUO postupke za koje je nadležno drugo središnje tijelo ili JLRS...')
