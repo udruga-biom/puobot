@@ -119,42 +119,43 @@ def puoscrape_alt(urlname):
     return output
 
 
+BASE_URL = 'http://puo.mzoip.hr/hr/'
+
+def trazenje(postupak):
+    print('tražim {} postupke...'.format(postupak.upper()))
+    url = BASE_URL + '{}.html'.format(postupak)
+    return puoscrape(url, postupak)
 
 # PUO postupci
-print('tražim PUO postupke...')
-
-url_puo = 'http://puo.mzoip.hr/hr/puo.html'
-puo_tab = puoscrape(url_puo, 'puo')
+puo_tab = trazenje('puo')
 
 # OPUO postupci
-print('tražim OPUO postupke...')
+opuo_tab = trazenje('opuo')
 
-url_opuo = 'http://puo.mzoip.hr/hr/opuo.html'
-opuo_tab = puoscrape(url_opuo, 'opuo')
 
 # prekogranični PUO postupci
 print('tražim prekogranične PUO postupke...')
 
-url_pg = 'http://puo.mzoip.hr/hr/puo/prekogranicni-postupci-procjene-utjecaja-zahvata-na-okolis.html'
+url_pg = BASE_URL + 'puo/prekogranicni-postupci-procjene-utjecaja-zahvata-na-okolis.html'
 puo_pg_tab = puoscrape_alt(url_pg)
 
 # SPUO postupci, nadležan MZOIE
 print('tražim SPUO postupke za koje je nadležno MZOIE...')
 
-url_spuo = 'http://puo.mzoip.hr/hr/spuo.html'
-url_spuo_min = 'http://puo.mzoip.hr/hr/spuo/postupci-strateske-procjene-nadlezno-tijelo-je-ministarstvo-zastite-okolisa-i-energetike.html'
+url_spuo = BASE_URL + 'spuo.html'
+url_spuo_min = BASE_URL + 'spuo/postupci-strateske-procjene-nadlezno-tijelo-je-ministarstvo-zastite-okolisa-i-energetike.html'
 spuo_min_tab = puoscrape_alt(url_spuo_min)
 
 # SPUO postupci, prekogranični
 print('tražim prekogranične SPUO postupke...')
 
-url_spuo_pg = 'http://puo.mzoip.hr/hr/spuo/prekogranicni-postupci-strateske-procjene.html'
+url_spuo_pg = BASE_URL + 'spuo/prekogranicni-postupci-strateske-procjene.html'
 spuo_pg_tab = puoscrape_alt(url_spuo_pg)
 
 # SPUO postupci, nadležno drugo središnje tijelo ili jedinice JLRS
 print('tražim SPUO postupke za koje je nadležno drugo središnje tijelo ili JLRS...')
 
-url_spuo_jlrs = 'http://puo.mzoip.hr/hr/spuo/postupci-strateske-procjene-nadlezno-tijelo-je-drugo-sredisnje-tijelo-drzavne-uprave-ili-jedinica-podrucne-regionalne-ili-lokalne-samouprave.html'
+url_spuo_jlrs = BASE_URL + 'spuo/postupci-strateske-procjene-nadlezno-tijelo-je-drugo-sredisnje-tijelo-drzavne-uprave-ili-jedinica-podrucne-regionalne-ili-lokalne-samouprave.html'
 r = requests.get(url_spuo_jlrs)
 soup = BeautifulSoup(r.content, 'lxml')
 sadrzaj = soup.find_all('h2', text=re.compile('Postupci stra.*'))[0].parent.parent.find_all('ul')[1]
@@ -170,7 +171,7 @@ for i in sadrzaj.find_all('li'):
 # OSPUO postupci
 print('tražim OSPUO postupke...')
 
-url_ospuo = 'http://puo.mzoip.hr/hr/spuo/ocjena-o-potrebi-provedbe-strateske-procjene.html'
+url_ospuo = BASE_URL + 'spuo/ocjena-o-potrebi-provedbe-strateske-procjene.html'
 r = requests.get(url_ospuo)
 soup = BeautifulSoup(r.content, 'lxml')
 sadrzaj = soup.find_all('div', 'accordion')[1]
