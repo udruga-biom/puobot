@@ -1,27 +1,42 @@
-# Robo-MZOIP
+﻿# Robo-MZOIP
+
+
+## Porblem
+1. Zanemariva participacija javnosti u PUO
+2. Neadekvatna infrastruktura za praćenje PUO
+što dovodi do neodrživog korištenja prirodnih resursa
+
+## Opseg projekta
+Sve zemlje s problemom nedovoljne transparentnosti podataka o procjeni utjecaja zahvata na okoliš, a rješava se kroz problem u RH
+
 ## Ciljevi
-### Opci ciljevi
-* povecati razinu zastitu okolisa i prirode u Republici Hrvatskoj
-### Specificni ciljevi
-* Uvodjenje sustava pristupa informacijama orjentiranog na korisnika
+### Opći ciljevi
+* povečati razinu zaštite okoliša i prirode
+* poticati okolišno održive projekte
+### Specifični ciljevi
+* Uvesti sustav pristupa informacijama koji je orjentiran na korisnike
 
 ## Aktivnosti
-* Digitalizacija baze podataka MZOIP-a (izvjestaja, Informacija, Rjesenja)
+* Digitalizacija baze podataka MZOIE-a (izvještaji, Informacije, Rješenja)
 	- Natural Language Processing
 	- Optical Character Recognition
-* Georeferencijanje podataka MZOIP-a
+* Izrada korisničkog sučelja
+
 
 ## Rezultati
+* Baza podataka
 * Web preglednik
-* Sustav obavje�tavanja (po lokaciji ili po temi)
+* API
+* Sustav obavještavanja (po lokaciji ili po temi)
 
 ## Trajanje projekta
-* 2 godine
+* 1 godine
 
 ## Ciljna skupina
-* Ovlastenici
+* Ovlaštenici
 * Ministarstvo
+* JLRS
 * Javne ustanove
-* Udruge civilnog drustva
-* Sira javnost
+* Udruge civilnog društva
+* Šira javnost
 
