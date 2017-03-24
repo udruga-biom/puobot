@@ -140,7 +140,7 @@ puo_tab = trazenje('puo')
 puo_tab_rev = list(reversed(puo_tab))
 for i in puo_tab_rev:
     line = i.split('\t')
-    scraperwiki.sqlite.save(unique_keys=['file_link', 'ime'], 
+    scraperwiki.sqlite.save(unique_keys=['file_link'], 
                             data={'kategorija': line[0],
                                   'ime': line[1],
                                   'dokument': line[2],
