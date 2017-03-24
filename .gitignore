@@ -1,6 +1,7 @@
 # puobot stuff
 output/
 input/
+data.sqlite
 
 # vim stuff
 *.swp
