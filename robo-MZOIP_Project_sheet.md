@@ -1,17 +1,15 @@
 # Robo-MZOIP
-##Ciljevi
-###Opæi ciljevi
-*
-###Specifièi ciljevi
-*
+## Ciljevi
+### Opci ciljevi
+* bla
+### Specifici ciljevi
+* bla
 
-##Aktivnosti
+## Aktivnosti
+* bla
 
-*
-
-##Rezultati
-
-*
+## Rezultati
+* bla
 ## Trajanje projekta
 
 ## Ciljna skupina
