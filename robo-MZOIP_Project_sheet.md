@@ -2,7 +2,7 @@
 ## Ciljevi
 ### Opci ciljevi
 * bla
-### Specifici ciljevi
+### Specificni ciljevi
 * bla
 
 ## Aktivnosti
@@ -11,5 +11,8 @@
 ## Rezultati
 * bla
 ## Trajanje projekta
+* bla
 
 ## Ciljna skupina
+* bla
+
