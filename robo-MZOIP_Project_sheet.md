@@ -1,18 +1,23 @@
 # Robo-MZOIP
 ## Ciljevi
 ### Opci ciljevi
-* bla
+* povecati zastitu okolisa i prirode u Republici Hrvatskoj (ili EU ako se radi o Life projektu)
 ### Specificni ciljevi
-* bla
+* Uvodjenje sustava pristupa informacijama orjentiranog prema korisniku
 
 ## Aktivnosti
-* bla
+* Digitalizacija baze podataka MZOIP-a (izvjestaja, Informacija, Rjesenja)
+* Georeferencijanje podataka MZOIP-a
 
 ## Rezultati
-* bla
+* Web preglednik
+
 ## Trajanje projekta
-* bla
+* 2 godine
 
 ## Ciljna skupina
-* bla
+* Ovlastenici
+* Ministarstvo
+* Udruge civilnog drustva
+* Sira javnost
 
