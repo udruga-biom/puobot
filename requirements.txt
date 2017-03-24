@@ -1,0 +1,4 @@
+lxml==3.7.2
+scraperwiki==0.5.1
+beautifulsoup4==4.5.3
+requests==2.12.4
