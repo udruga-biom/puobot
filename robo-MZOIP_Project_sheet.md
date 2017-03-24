@@ -4,7 +4,7 @@
 ## Porblem
 1. Zanemariva participacija javnosti u PUO
 2. Neadekvatna infrastruktura za praćenje PUO
-što dovodi do neodrživog korištenja prirodnih resursa
+3. Ova dva problema u konačnici dovode do neodrživog korištenja prirodnih resursa
 
 ## Opseg projekta
 Sve zemlje s problemom nedovoljne transparentnosti podataka o procjeni utjecaja zahvata na okoliš, a rješava se kroz problem u RH
