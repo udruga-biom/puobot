@@ -25,11 +25,8 @@ args = parser.parse_args()
 if args.twitter:
     import twython
     with open('input/twit_api_data.txt', 'r') as f:
-        twython_api_data = f.readlines()
-    twitter = twython.Twython(twython_api_data[0].strip(),
-                              twython_api_data[1].strip(),
-                              twython_api_data[2].strip(),
-                              twython_api_data[3].strip())
+        twython_api_data = f.read().splitlines()
+    twitter = twython.Twython(*twython_api_data)
     print('>> Twitter mode')
 else:
     print('>> Twitterless mode')
