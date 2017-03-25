@@ -39,8 +39,9 @@ if 'arhiva' not in os.listdir('output'):
 if 'puo-arhiva-git' not in os.listdir('output'):
     os.mkdir('output/puo-arhiva-git')
 
-# funkcija za snimanje
+
 def puosave(save_dir):
+    '''funkcija za snimanje'''
     postupci = {
         'puo': puo_tab,
         'puo_pg': puo_pg_tab,
@@ -55,8 +56,8 @@ def puosave(save_dir):
             f.write('\n'.join(postupak))
 
 
-# funkcija za čitanje
 def puoread(read_dir, filename):
+    '''funkcija za čitanje'''
     with open(read_dir + filename + '.tsv', 'r') as f:
         in_file = f.read().splitlines()
     return in_file
@@ -67,6 +68,7 @@ def get_sadrzaj(url, clan=0):
     soup = BeautifulSoup(r.content, 'lxml')
     return soup.find_all('div', 'accordion')[clan]
 
+
 def get_zahvat(url):
     sadrzaj = get_sadrzaj(url)
     zahvat_ime = sadrzaj.find_all('h3', recursive=False)
@@ -74,8 +76,8 @@ def get_zahvat(url):
     return zahvat_ime, zahvat_kat
 
 
-# funkcija za parse PUO/OPUO
 def puoscrape(urlname, postupak='puo'):
+    '''funkcija za parse PUO/OPUO'''
     if postupak == 'puo':
         pattern = re.compile('PUO postupci 2[0-9]{3}')
     elif postupak == 'opuo':
@@ -108,8 +110,9 @@ def puoscrape(urlname, postupak='puo'):
                         output.append('\t'.join(polja))
     return output
 
-# funkcija za parse SPUO i prekograničnih postupaka
+
 def puoscrape_alt(urlname):
+    '''funkcija za parse SPUO i prekograničnih postupaka'''
     zahvati = get_zahvat(urlname)
     output = []
     for ime, kategorija in zip(*zahvati):
