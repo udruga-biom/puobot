@@ -122,16 +122,11 @@ def puoscrape_alt(urlname):
 
 BASE_URL = 'http://puo.mzoip.hr/hr/'
 
+
 def trazenje(postupak):
     print('tražim {} postupke...'.format(postupak.upper()))
     url = BASE_URL + '{}.html'.format(postupak)
     return puoscrape(url, postupak)
-
-# PUO postupci
-puo_tab = trazenje('puo')
-
-# OPUO postupci
-opuo_tab = trazenje('opuo')
 
 
 def trazenje_prekogranicnih(url):
@@ -139,47 +134,65 @@ def trazenje_prekogranicnih(url):
     print('tražim prekogranične {} postupke...'.format(postupak.upper()))
     return puoscrape_alt(BASE_URL + url)
 
+
+def trazenje_spuo(url, nadleznost):
+    if nadleznost == 'MZOIE':
+        print('tražim SPUO postupke za koje je nadležno MZOIE...')
+        return puoscrape_alt(BASE_URL + url)
+    else:
+        print('tražim SPUO postupke za koje je nadležno drugo središnje tijelo ili JLRS...')
+        r = requests.get(BASE_URL + url)
+        soup = BeautifulSoup(r.content, 'lxml')
+        sadrzaj = (soup.find_all('h2', text=re.compile('Postupci stra.*'))[0]
+                   .parent.parent.find_all('ul')[1])
+
+        postupci = []
+        for i in sadrzaj.find_all('li'):
+            trazenje = re.search('^(.*?)(Nadle.*?)http.*', i.text)
+            zahvat = trazenje.group(1)
+            nadlezan = trazenje.group(2)
+            link = i.find('a')['href']
+            postupci.append('\t'.join([zahvat, nadlezan, link]))
+        return postupci
+
+
+def trazenje_ospuo(url):
+    print('tražim OSPUO postupke...')
+    sadrzaj = get_sadrzaj(BASE_URL + url, clan=1)
+
+    postupci = []
+    for i in sadrzaj.find_all('a'):
+        link = i['href']
+        tekst = i.parent.parent.parent.parent.find('h3').text.strip()
+        postupci.append('\t'.join([tekst, link]))
+    return postupci
+
+
+# PUO postupci
+puo_tab = trazenje('puo')
+
+# OPUO postupci
+opuo_tab = trazenje('opuo')
+
 # prekogranični PUO postupci
 puo_pg_tab = trazenje_prekogranicnih('puo/prekogranicni-postupci-procjene-utjecaja-zahvata-na-okolis.html')
 
 # SPUO postupci, prekogranični
 spuo_pg_tab = trazenje_prekogranicnih('spuo/prekogranicni-postupci-strateske-procjene.html')
 
-
 # SPUO postupci, nadležan MZOIE
-print('tražim SPUO postupke za koje je nadležno MZOIE...')
-
-url_spuo_min = BASE_URL + 'spuo/postupci-strateske-procjene-nadlezno-tijelo-je-ministarstvo-zastite-okolisa-i-energetike.html'
-spuo_min_tab = puoscrape_alt(url_spuo_min)
-
+SPUO_BASE_URL = 'spuo/postupci-strateske-procjene-nadlezno-tijelo-je-'
+url_spuo_min = SPUO_BASE_URL + 'ministarstvo-zastite-okolisa-i-energetike.html'
+spuo_min_tab = trazenje_spuo(url_spuo_min, 'MZOIE')
 
 # SPUO postupci, nadležno drugo središnje tijelo ili jedinice JLRS
-print('tražim SPUO postupke za koje je nadležno drugo središnje tijelo ili JLRS...')
-
-url_spuo_jlrs = BASE_URL + 'spuo/postupci-strateske-procjene-nadlezno-tijelo-je-drugo-sredisnje-tijelo-drzavne-uprave-ili-jedinica-podrucne-regionalne-ili-lokalne-samouprave.html'
-r = requests.get(url_spuo_jlrs)
-soup = BeautifulSoup(r.content, 'lxml')
-sadrzaj = soup.find_all('h2', text=re.compile('Postupci stra.*'))[0].parent.parent.find_all('ul')[1]
-
-spuo_jlrs_tab = []
-for i in sadrzaj.find_all('li'):
-    trazenje = re.search('^(.*?)(Nadle.*?)http.*', i.text)
-    zahvat = trazenje.group(1)
-    nadlezan = trazenje.group(2)
-    link = i.find('a')['href']
-    spuo_jlrs_tab.append('\t'.join([zahvat, nadlezan, link]))
+url_spuo_jlrs = (SPUO_BASE_URL + 'drugo-sredisnje-tijelo-drzavne-uprave'
+                 '-ili-jedinica-podrucne-regionalne-ili-lokalne-samouprave.html')
+spuo_jlrs_tab = trazenje_spuo(url_spuo_jlrs, 'JLRS')
 
 # OSPUO postupci
-print('tražim OSPUO postupke...')
+ospuo_tab = trazenje_ospuo('spuo/ocjena-o-potrebi-provedbe-strateske-procjene.html')
 
-url_ospuo = BASE_URL + 'spuo/ocjena-o-potrebi-provedbe-strateske-procjene.html'
-sadrzaj = get_sadrzaj(url_ospuo, clan=1)
-
-ospuo_tab = []
-for i in sadrzaj.find_all('a'):
-    link = i['href']
-    tekst = i.parent.parent.parent.parent.find('h3').text.strip()
-    ospuo_tab.append('\t'.join([tekst, link]))
 
 puosave('output/puo-arhiva-git/')
 
