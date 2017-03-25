@@ -62,33 +62,40 @@ def puoread(read_dir, filename):
     return in_file
 
 
+def get_sadrzaj(url, clan=0):
+    r = requests.get(url)
+    soup = BeautifulSoup(r.content, 'lxml')
+    return soup.find_all('div', 'accordion')[clan]
+
+def get_zahvat(url):
+    sadrzaj = get_sadrzaj(url)
+    zahvat_ime = sadrzaj.find_all('h3', recursive=False)
+    zahvat_kat = sadrzaj.find_all('div', recursive=False)
+    return zahvat_ime, zahvat_kat
+
+
 # funkcija za parse PUO/OPUO
 def puoscrape(urlname, postupak='puo'):
-    r = requests.get(urlname)
-
-    url = 'http://puo.mzoip.hr'
     if postupak == 'puo':
         pattern = re.compile('PUO postupci 2[0-9]{3}')
     elif postupak == 'opuo':
         pattern = re.compile('OPUO postupci 2[0-9]{3}')
 
+    r = requests.get(urlname)
     soup = BeautifulSoup(r.content, 'lxml')
     link_elem = (soup.find_all('div', 'four mobile-four columns')[2]
                      .find_all('a', text=pattern))
 
+    url = 'http://puo.mzoip.hr'
     output = []
     for godina in link_elem:
         print(godina.text.strip())
         url_g = url + godina['href']
-        r = requests.get(url_g)
-        soup = BeautifulSoup(r.content, 'lxml')
-        sadrzaj = soup.find_all('div', 'accordion')[0]
-        zahvat_ime = sadrzaj.find_all('h3', recursive=False)
-        zahvat_kat = sadrzaj.find_all('div', recursive=False)
-        if len(zahvat_ime) != len(zahvat_kat):
+        zahvati = get_zahvat(url_g)
+        if len(zahvati[0]) != len(zahvati[1]):
             print('broj zahvata i kategorija se ne podudara')
         else:
-            for ime, zahvacena_kategorija in zip(zahvat_ime, zahvat_kat):
+            for ime, zahvacena_kategorija in zip(*zahvati):
                 kategorije = zahvacena_kategorija.find_all('h3')
                 for kat_index, kategorija in enumerate(kategorije):
                     linkovi = (zahvacena_kategorija
@@ -103,13 +110,9 @@ def puoscrape(urlname, postupak='puo'):
 
 # funkcija za parse SPUO i prekograničnih postupaka
 def puoscrape_alt(urlname):
-    r = requests.get(urlname)
-    soup = BeautifulSoup(r.content, 'lxml')
+    zahvati = get_zahvat(urlname)
     output = []
-    sadrzaj = soup.find_all('div', 'accordion')[0]
-    zahvat_ime = sadrzaj.find_all('h3', recursive=False)
-    zahvat_kat = sadrzaj.find_all('div', recursive=False)
-    for ime, kategorija in zip(zahvat_ime, zahvat_kat):
+    for ime, kategorija in zip(*zahvati):
         linkovi = kategorija.find_all('a')
         for linak in linkovi:
             polja = [ime.text.strip(), linak.text.strip(), linak['href']]
@@ -171,9 +174,7 @@ for i in sadrzaj.find_all('li'):
 print('tražim OSPUO postupke...')
 
 url_ospuo = BASE_URL + 'spuo/ocjena-o-potrebi-provedbe-strateske-procjene.html'
-r = requests.get(url_ospuo)
-soup = BeautifulSoup(r.content, 'lxml')
-sadrzaj = soup.find_all('div', 'accordion')[1]
+sadrzaj = get_sadrzaj(url_ospuo, clan=1)
 
 ospuo_tab = []
 for i in sadrzaj.find_all('a'):
