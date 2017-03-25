@@ -149,7 +149,6 @@ spuo_pg_tab = trazenje_prekogranicnih('spuo/prekogranicni-postupci-strateske-pro
 # SPUO postupci, nadležan MZOIE
 print('tražim SPUO postupke za koje je nadležno MZOIE...')
 
-url_spuo = BASE_URL + 'spuo.html'
 url_spuo_min = BASE_URL + 'spuo/postupci-strateske-procjene-nadlezno-tijelo-je-ministarstvo-zastite-okolisa-i-energetike.html'
 spuo_min_tab = puoscrape_alt(url_spuo_min)
 
