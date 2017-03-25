@@ -39,25 +39,25 @@ if 'arhiva' not in os.listdir('output'):
 if 'puo-arhiva-git' not in os.listdir('output'):
     os.mkdir('output/puo-arhiva-git')
 
-# funkcija za snimanje i čitanje
+# funkcija za snimanje
 def puosave(save_dir):
-    with open(save_dir + 'puo.tsv', 'w') as f:
-        f.write('\n'.join(puo_tab))
-    with open(save_dir + 'puo_pg.tsv', 'w') as f:
-        f.write('\n'.join(puo_pg_tab))
-    with open(save_dir + 'opuo.tsv', 'w') as f:
-        f.write('\n'.join(opuo_tab))
-    with open(save_dir + 'spuo_min.tsv', 'w') as f:
-        f.write('\n'.join(spuo_min_tab))
-    with open(save_dir + 'spuo_pg.tsv', 'w') as f:
-        f.write('\n'.join(spuo_pg_tab))
-    with open(save_dir + 'spuo_jlrs.tsv', 'w') as f:
-        f.write('\n'.join(spuo_jlrs_tab))
-    with open(save_dir + 'ospuo.tsv', 'w') as f:
-        f.write('\n'.join(ospuo_tab))
+    postupci = {
+        'puo': puo_tab,
+        'puo_pg': puo_pg_tab,
+        'opuo': opuo_tab,
+        'spuo_min': spuo_min_tab,
+        'spuo_pg': spuo_pg_tab,
+        'spuo_jlrs': spuo_jlrs_tab,
+        'ospuo': ospuo_tab,
+    }
+    for filename, postupak in postupci.items():
+        with open(save_dir + filename + '.tsv', 'w') as f:
+            f.write('\n'.join(postupak))
 
-def puoread(read_dir, file):
-    with open(read_dir + file + '.tsv', 'r') as f:
+
+# funkcija za čitanje
+def puoread(read_dir, filename):
+    with open(read_dir + filename + '.tsv', 'r') as f:
         in_file = f.read().splitlines()
     return in_file
 
