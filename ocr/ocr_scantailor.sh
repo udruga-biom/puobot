@@ -16,7 +16,7 @@ for i in *.pdf; do
     done
     cat "${i%.*}"/*.txt > ocr_txt/"${i%.*}".txt
     mv "$i" pdf_orig/"$i"
-    pdfunite "$(ls -v "${i%.*}"/*.pdf)" ocr_pdf/"${i%.*}".pdf
+    pdfunite $(ls -v "${i%.*}"/*.pdf) ocr_pdf/"${i%.*}".pdf
     rm -rf "${i%.*}"
   else
     echo "Nema pdf-ova za OCR"
