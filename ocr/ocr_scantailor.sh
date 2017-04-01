@@ -1,22 +1,24 @@
+#!/bin/bash
+
 mkdir -p ocr_pdf
 mkdir -p ocr_txt
 mkdir -p pdf_orig
 for i in *.pdf; do
-	type="$(file -b $i)"
-	if [ "${type%%,*}" == "PDF document"  ]; 
-	then
-		mkdir "${i%.*}"
-		convert -density 300 -deskew 40 "$i" "${i%.*}"/"${i%.*}".png
-		for p in "${i%.*}"/*.png; do
-			scantailor-cli --dpi=300 --dewarping=auto --threshold=-7  "$p" "${i%.*}"
-			tesseract -l hrv -psm 1 --user-words hrv.user-words "${p%.*}".tif "${p%.*}"
-			tesseract -l hrv -psm 1 --user-words hrv.user-words  "${p%.*}".tif "${p%.*}" pdf
-		done
-		cat "${i%.*}"/*.txt > ocr_txt/"${i%.*}".txt
-		mv "$i" pdf_orig/"$i"
-		pdfunite $(ls -v ${i%.*}/*.pdf) ocr_pdf/"${i%.*}".pdf
-		rm -rf "${i%.*}"
-	else
-		echo "Nema pdf-ova za OCR"
-	fi
+  type="$(file -b "$i")"
+  if [ "${type%%,*}" == "PDF document"  ];
+  then
+    mkdir "${i%.*}"
+    convert -density 300 -deskew 40 "$i" "${i%.*}"/"${i%.*}".png
+    for p in "${i%.*}"/*.png; do
+      scantailor-cli --dpi=300 --dewarping=auto --threshold=-7  "$p" "${i%.*}"
+      tesseract -l hrv -psm 1 --user-words hrv.user-words "${p%.*}".tif "${p%.*}"
+      tesseract -l hrv -psm 1 --user-words hrv.user-words  "${p%.*}".tif "${p%.*}" pdf
+    done
+    cat "${i%.*}"/*.txt > ocr_txt/"${i%.*}".txt
+    mv "$i" pdf_orig/"$i"
+    pdfunite "$(ls -v "${i%.*}"/*.pdf)" ocr_pdf/"${i%.*}".pdf
+    rm -rf "${i%.*}"
+  else
+    echo "Nema pdf-ova za OCR"
+  fi
 done
