@@ -310,16 +310,8 @@ def citanje_arhive():
         return None
 
     arhiva_zadnji = 'output/arhiva/' + arhiva_dir[-1] + '/'
-    puo_old = puoread(arhiva_zadnji, 'puo')
-    puo_pg_old = puoread(arhiva_zadnji, 'puo_pg')
-    opuo_old = puoread(arhiva_zadnji, 'opuo')
-    spuo_min_old = puoread(arhiva_zadnji, 'spuo_min')
-    spuo_pg_old = puoread(arhiva_zadnji, 'spuo_pg')
-    spuo_jlrs_old = puoread(arhiva_zadnji, 'spuo_jlrs')
-    ospuo_old = puoread(arhiva_zadnji, 'ospuo')
-
-    oldies = [puo_old, puo_pg_old, opuo_old, spuo_min_old, spuo_pg_old, spuo_jlrs_old, ospuo_old]
-
+    oldies = [puoread(arhiva_zadnji, ime_zahvata) for ime_zahvata in
+              ['puo', 'puo_pg', 'opuo', 'spuo_min', 'spuo_pg', 'spuo_jlrs', 'ospuo']]
     return oldies
 
 
