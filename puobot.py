@@ -23,6 +23,9 @@ BASE_URL = 'http://puo.mzoip.hr/hr/'
 def get_twitter_instance():
     """Kreira twitter instancu.
 
+    Instanca se koristi za objavljivanje tweetova o novim postupcima.
+    Potrebno je imati autentifikacijske podatke u zasebnoj datoteci.
+
     Returns:
         twython.Twython instanca.
     """
@@ -49,7 +52,7 @@ def puosave(save_dir, postupci):
     Snimanje svih postupaka u .tsv formatu, u odabrani `save_dir` direktorij.
 
     Args:
-        save_dir (string): relativni path do direktorija za snimanje.
+        save_dir (str): relativni path do direktorija za snimanje.
         postupci (list): popis svih postupaka koje se snima.
     """
     imena = ['puo', 'puo_pg', 'opuo', 'spuo_min', 'spuo_pg', 'spuo_jlrs', 'ospuo']
@@ -59,11 +62,14 @@ def puosave(save_dir, postupci):
 
 
 def puoread(read_dir, filename):
-    """Citanje postupka.
+    """Ucitava postupak.
+
+    Citanje ranije pohranjenog postupka u .tsv formatu.
+    Poziva ju `citanje_arhive` funkcija.
 
     Args:
-        read_dir (string): relativni path do direktorija iz kojeg se cita.
-        filename (string): ime datoteke koju se ucitava (bez ekstenzije).
+        read_dir (str): relativni path do direktorija iz kojeg se cita.
+        filename (str): ime datoteke koju se ucitava (bez ekstenzije).
     Returns:
         list: sadrzaj datoteke.
     """
@@ -76,7 +82,7 @@ def get_sadrzaj(url, clan=0):
     """Dohvaca sadrzaj s mreznih stranica.
 
     Args:
-        url (string): path do mreznih stranica.
+        url (str): path do mreznih stranica.
         clan (int): indeks clana kojeg se trazi.
     Returns:
         string: sadrzaj zeljenog clana.
@@ -92,7 +98,7 @@ def get_zahvat(url):
     Pozivaju je `parse_postupaka` i `parse_alt` funkcije.
 
     Args:
-        url (string): path do mreznih stranica.
+        url (str): path do mreznih stranica.
     Returns:
         tuple: ime i kategorija zahvata.
     """
@@ -108,7 +114,7 @@ def trazenje_postupaka(postupak):
     Obavjestava o trazenju postupka, poziva je `parse_postupaka` funkcija.
 
     Args:
-        postupak (string): postupak koji se trazi, puo ili opuo.
+        postupak (str): postupak koji se trazi, `puo` ili `opuo`.
     Returns:
         list: postupci po godinama.
     """
@@ -134,7 +140,7 @@ def parse_postupaka(postupak):
     link. Vraca listu tih vrijednosti.
 
     Args:
-        postupak (string): postupak koji se trazi, puo ili opuo.
+        postupak (str): postupak koji se trazi, `puo` ili `opuo`.
     Returns:
         list: detaljni (godina, ime, kategorija, link) popis svih postupaka.
     """
@@ -168,7 +174,7 @@ def parse_alt(url):
     Pozivaju je `trazenje_prekogranicnih` i `trazenje_spuo` funkcije.
 
     Args:
-        url (string): path do mreznih stranica.
+        url (str): path do mreznih stranica.
     Returns:
         list: detaljni (ime, link) popis svih postupaka.
     """
@@ -188,7 +194,7 @@ def trazenje_prekogranicnih(url):
     Obavjestava o trazenju postupka, poziva `parse_alt` funkciju.
 
     Args:
-        url (string): path do mreznih stranica.
+        url (str): path do mreznih stranica.
     Returns:
         list: detaljni (ime, link) popis svih postupaka.
     """
@@ -203,7 +209,7 @@ def parse_jlrs(url):
     Poziva je `trazenje_spuo` funkcija.
 
     Args:
-        url (string): path do mreznih stranica.
+        url (str): path do mreznih stranica.
     Returns:
         list: detaljni (ime, nadleznost, link) popis svih postupaka.
     """
@@ -228,8 +234,8 @@ def trazenje_spuo(url, nadleznost):
     `parse_alt` ili `parse_jlrs` funkciju.
 
     Args:
-        url (string): path do mreznih stranica.
-        nadleznost (string): MZOIE ili JLRS.
+        url (str): path do mreznih stranica.
+        nadleznost (str): `MZOIE` ili `JLRS`.
     Returns:
         list: popis postupaka.
     """
@@ -245,7 +251,7 @@ def trazenje_ospuo(url):
     """Trazi OSPUO postupke.
 
     Args:
-        url (string): path do mreznih stranica.
+        url (str): path do mreznih stranica.
     Returns:
         list: popis postupaka.
     """
