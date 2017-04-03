@@ -18,6 +18,7 @@ from bs4 import BeautifulSoup
 
 
 BASE_URL = 'http://puo.mzoip.hr/hr/'
+IMENA_POSTUPAKA = ['puo', 'puo_pg', 'opuo', 'spuo_min', 'spuo_pg', 'spuo_jlrs', 'ospuo']
 
 
 def get_twitter_instance():
@@ -55,27 +56,28 @@ def puosave(save_dir, postupci):
         save_dir (str): relativni path do direktorija za snimanje.
         postupci (list): popis svih postupaka koje se snima.
     """
-    imena = ['puo', 'puo_pg', 'opuo', 'spuo_min', 'spuo_pg', 'spuo_jlrs', 'ospuo']
-    for filename, postupak in zip(imena, postupci):
+    for filename, postupak in zip(IMENA_POSTUPAKA, postupci):
         with open(save_dir + filename + '.tsv', 'w') as f:
             f.write('\n'.join(postupak))
 
 
-def puoread(read_dir, filename):
-    """Ucitava postupak.
+def puoread(read_dir):
+    """Ucitava postojece postupke.
 
-    Citanje ranije pohranjenog postupka u .tsv formatu.
+    Citanje ranije pohranjenih postupaka u .tsv formatu.
     Poziva ju `citanje_arhive` funkcija.
 
     Args:
         read_dir (str): relativni path do direktorija iz kojeg se cita.
-        filename (str): ime datoteke koju se ucitava (bez ekstenzije).
     Returns:
-        list: sadrzaj datoteke.
+        list: popis postupaka sa sadrzajima datoteka.
     """
-    with open(read_dir + filename + '.tsv', 'r') as f:
-        in_file = f.read().splitlines()
-    return in_file
+    postojeci_postupci = []
+    for filename in IMENA_POSTUPAKA:
+        with open(read_dir + filename + '.tsv', 'r') as f:
+            in_file = f.read().splitlines()
+        postojeci_postupci.append(in_file)
+    return postojeci_postupci
 
 
 def get_sadrzaj(url, clan=0):
@@ -310,9 +312,7 @@ def citanje_arhive():
         return None
 
     arhiva_zadnji = 'output/arhiva/' + arhiva_dir[-1] + '/'
-    oldies = [puoread(arhiva_zadnji, ime_zahvata) for ime_zahvata in
-              ['puo', 'puo_pg', 'opuo', 'spuo_min', 'spuo_pg', 'spuo_jlrs', 'ospuo']]
-    return oldies
+    return puoread(arhiva_zadnji)
 
 
 def pisanje_arhive(postupci):
