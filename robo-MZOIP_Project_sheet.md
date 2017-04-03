@@ -1,7 +1,7 @@
-﻿# Robo-MZOIP
+# Robo-MZOIP
 
 
-## Porblem
+## Problem
 1. Zanemariva participacija javnosti u PUO
 2. Neadekvatna infrastruktura za praćenje PUO
 3. Ova dva problema u konačnici dovode do neodrživog korištenja prirodnih resursa
@@ -11,13 +11,13 @@ Sve zemlje s problemom nedovoljne transparentnosti podataka o procjeni utjecaja 
 
 ## Ciljevi
 ### Opći ciljevi
-* povečati razinu zaštite okoliša i prirode
+* povećati razinu zaštite okoliša i prirode
 * poticati okolišno održive projekte
 ### Specifični ciljevi
 * Uvesti sustav pristupa informacijama koji je orjentiran na korisnike
 
 ## Aktivnosti
-* Digitalizacija baze podataka MZOIE-a (izvještaji, Informacije, Rješenja)
+* Digitalizacija baze podataka MZOIE-a (izvještaji, informacije, rješenja)
 	- Natural Language Processing
 	- Optical Character Recognition
 * Izrada korisničkog sučelja
