@@ -80,31 +80,31 @@ def puoread(read_dir):
     return postojeci_postupci
 
 
-def get_sadrzaj(url, clan=0):
+def get_sadrzaj(full_url, clan=0):
     """Dohvaca sadrzaj s mreznih stranica.
 
     Args:
-        url (str): path do mreznih stranica.
+        full_url (str): path do mreznih stranica.
         clan (int): indeks clana kojeg se trazi.
     Returns:
         string: sadrzaj zeljenog clana.
     """
-    r = requests.get(url)
+    r = requests.get(full_url)
     soup = BeautifulSoup(r.content, 'lxml')
     return soup.find_all('div', 'accordion')[clan]
 
 
-def get_zahvat(url):
+def get_zahvat(full_url):
     """Trazi ime i kategoriju zahvata.
 
     Pozivaju je `parse_postupaka` i `parse_alt` funkcije.
 
     Args:
-        url (str): path do mreznih stranica.
+        full_url (str): path do mreznih stranica.
     Returns:
         tuple: ime i kategorija zahvata.
     """
-    sadrzaj = get_sadrzaj(url)
+    sadrzaj = get_sadrzaj(full_url)
     zahvat_ime = sadrzaj.find_all('h3', recursive=False)
     zahvat_kat = sadrzaj.find_all('div', recursive=False)
     return zahvat_ime, zahvat_kat
@@ -176,7 +176,7 @@ def parse_alt(url):
     Pozivaju je `trazenje_prekogranicnih` i `trazenje_spuo` funkcije.
 
     Args:
-        url (str): path do mreznih stranica.
+        url (str): relativni path do mreznih stranica.
     Returns:
         list: detaljni (ime, link) popis svih postupaka.
     """
@@ -196,7 +196,7 @@ def trazenje_prekogranicnih(url):
     Obavjestava o trazenju postupka, poziva `parse_alt` funkciju.
 
     Args:
-        url (str): path do mreznih stranica.
+        url (str): relativni path do mreznih stranica.
     Returns:
         list: detaljni (ime, link) popis svih postupaka.
     """
@@ -211,7 +211,7 @@ def parse_jlrs(url):
     Poziva je `trazenje_spuo` funkcija.
 
     Args:
-        url (str): path do mreznih stranica.
+        url (str): relativni path do mreznih stranica.
     Returns:
         list: detaljni (ime, nadleznost, link) popis svih postupaka.
     """
@@ -236,7 +236,7 @@ def trazenje_spuo(url, nadleznost):
     `parse_alt` ili `parse_jlrs` funkciju.
 
     Args:
-        url (str): path do mreznih stranica.
+        url (str): relativni path do mreznih stranica.
         nadleznost (str): `MZOIE` ili `JLRS`.
     Returns:
         list: popis postupaka.
@@ -253,7 +253,7 @@ def trazenje_ospuo(url):
     """Trazi OSPUO postupke.
 
     Args:
-        url (str): path do mreznih stranica.
+        url (str): relativni path do mreznih stranica.
     Returns:
         list: popis postupaka.
     """
