@@ -350,6 +350,7 @@ def trazi_razlike(staro, novo):
         razlike.extend(list(razlika))
 
     pattern = re.compile(r'^(.*?) \[PDF\]')
+    novosti = []
     for razlika in razlike:
         dijelovi = razlika.split('\t')
         if re.match(pattern, dijelovi[1]):
@@ -373,18 +374,15 @@ def trazi_razlike(staro, novo):
             ime_zahvata = dijelovi[0][:110]
             update = ' '.join([ime_zahvata, link])
         print(update)
-        if args.twitter:
-            twitter.update_status(status=update)
         print(len(update))
+        novosti.append(update)
+    return novosti
 
 
-if __name__ == '__main__':
+def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--twitter', help='optional argument to update twitter')
     args = parser.parse_args()
-
-    if args.twitter:
-        twitter = get_twitter_instance()
 
     kreiranje_foldera()
     novi_postupci = dohvat_postupaka()
@@ -393,4 +391,13 @@ if __name__ == '__main__':
     if not stari_postupci:
         sys.exit('prvo pokretanje, nema arhive, snapshot snimljen u ' + folder)
 
-    trazi_razlike(stari_postupci, novi_postupci)
+    novosti = trazi_razlike(stari_postupci, novi_postupci)
+
+    if args.twitter:
+        twitter = get_twitter_instance()
+        for novost in novosti:
+            twitter.update_status(status=novost)
+
+
+if __name__ == '__main__':
+    main()
