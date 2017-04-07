@@ -57,7 +57,7 @@ def puosave(save_dir, postupci):
         postupci (list): popis svih postupaka koje se snima.
     """
     for filename, postupak in zip(IMENA_POSTUPAKA, postupci):
-        with open(save_dir + filename + '.tsv', 'w') as f:
+        with open(save_dir + filename + '.tsv', 'w', encoding='utf-8') as f:
             f.write('\n'.join(postupak))
 
 
