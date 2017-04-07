@@ -349,6 +349,7 @@ def trazi_razlike(staro, novo):
         razlika = set(new) - set(old)
         razlike.extend(list(razlika))
 
+    POCETNI_ZNAKOVI = 60
     pattern = re.compile(r'^(.*?) \[PDF\]')
     novosti = []
     for razlika in razlike:
@@ -357,24 +358,40 @@ def trazi_razlike(staro, novo):
             ime_file = re.search(pattern, dijelovi[1]).group(1)
         else:
             ime_file = dijelovi[1]
-        ime_file = ime_file[:57] + '...'
         link = dijelovi[-1]
 
         if len(dijelovi) == 5:
             godina = dijelovi[0][-5:-1]
+            ime_zahvat = dijelovi[1]
             kategorija = dijelovi[2]
-            free_len = 140 - 3 - len(godina) - len(kategorija)- len(ime_file) - 25
-            ime_zahvat = dijelovi[1][:free_len]
-            update = '|'.join([godina, ime_zahvat, kategorija, ime_file]) + ' ' + link
+            free_len = 140 - 3 - len(godina) - len(kategorija) - 25
+
+            if ime_zahvat[:POCETNI_ZNAKOVI] == ime_file[:POCETNI_ZNAKOVI]:
+                ime_file = ime_file[:free_len]
+                update = '|'.join([godina, kategorija, ime_file])
+            else:
+                ime_file = ime_file[:POCETNI_ZNAKOVI] + '...'
+                free_len -= POCETNI_ZNAKOVI + 4
+                ime_zahvat = ime_zahvat[:free_len]
+                update = '|'.join([godina, ime_zahvat, kategorija, ime_file])
+
         elif len(dijelovi) == 3:
-            free_len = 140 - 1 - len(ime_file) - 24
-            ime_zahvat = dijelovi[0][:free_len]
-            update = ime_zahvat + '|' + ime_file + ' ' + link
+            ime_zahvat = dijelovi[0]
+            free_len = 140 - 1 - 25
+            if ime_zahvat[:POCETNI_ZNAKOVI] == ime_file[:POCETNI_ZNAKOVI]:
+                update = ime_file[:free_len]
+            else:
+                ime_file = ime_file[:POCETNI_ZNAKOVI] + '...'
+                free_len -= POCETNI_ZNAKOVI + 4
+                ime_zahvat = ime_zahvat[:free_len]
+                update = '|'.join([ime_zahvat, ime_file])
+
         elif len(dijelovi) == 2:
-            ime_zahvata = dijelovi[0][:110]
-            update = ' '.join([ime_zahvata, link])
+            ime_zahvat = dijelovi[0][:110]
+            update = ime_zahvat
+
+        update += ' ' + link
         print(update)
-        print(len(update))
         novosti.append(update)
     return novosti
 
