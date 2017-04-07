@@ -74,7 +74,7 @@ def puoread(read_dir):
     """
     postojeci_postupci = []
     for filename in IMENA_POSTUPAKA:
-        with open(read_dir + filename + '.tsv', 'r') as f:
+        with open(read_dir + filename + '.tsv', 'r', encoding='utf-8') as f:
             in_file = f.read().splitlines()
         postojeci_postupci.append(in_file)
     return postojeci_postupci
