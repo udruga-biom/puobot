@@ -11,8 +11,8 @@ for i in *.pdf; do
     convert -density 300 -deskew 40 "$i" "${i%.*}"/"${i%.*}".png
     for p in "${i%.*}"/*.png; do
       scantailor-cli --dpi=300 --dewarping=auto --threshold=-7  "$p" "${i%.*}"
-      tesseract -l hrv -psm 1 --user-words hrv.user-words "${p%.*}".tif "${p%.*}"
-      tesseract -l hrv -psm 1 --user-words hrv.user-words  "${p%.*}".tif "${p%.*}" pdf
+      tesseract -l hrv -psm 1 "${p%.*}".tif "${p%.*}"
+      tesseract -l hrv -psm 1 "${p%.*}".tif "${p%.*}" pdf
     done
     cat "${i%.*}"/*.txt > ocr_txt/"${i%.*}".txt
     mv "$i" pdf_orig/"$i"
