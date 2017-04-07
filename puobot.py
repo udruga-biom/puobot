@@ -365,11 +365,11 @@ def trazi_razlike(staro, novo):
             kategorija = dijelovi[2]
             free_len = 140 - 3 - len(godina) - len(kategorija)- len(ime_file) - 25
             ime_zahvat = dijelovi[1][:free_len]
-            update = '-'.join([godina, ime_zahvat, kategorija, ime_file]) + ' ' + link
+            update = '|'.join([godina, ime_zahvat, kategorija, ime_file]) + ' ' + link
         elif len(dijelovi) == 3:
             free_len = 140 - 1 - len(ime_file) - 24
             ime_zahvat = dijelovi[0][:free_len]
-            update = ime_zahvat + '-' + ime_file + ' ' + link
+            update = ime_zahvat + '|' + ime_file + ' ' + link
         elif len(dijelovi) == 2:
             ime_zahvata = dijelovi[0][:110]
             update = ' '.join([ime_zahvata, link])
