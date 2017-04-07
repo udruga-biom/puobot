@@ -1,6 +1,6 @@
 # puobot stuff
 output/
-input/
+input/twit_api_data.txt
 data.sqlite
 
 # vim stuff
