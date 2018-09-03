@@ -224,7 +224,11 @@ def parse_jlrs(url):
         trazenje = re.search('^(.*?)(Nadle.*?)http.*', i.text)
         zahvat = trazenje.group(1)
         nadlezan = trazenje.group(2)
-        link = i.find('a')['href']
+        link = i.find('a')
+        if link:
+            link = link['href']
+        else:
+            link = ""
         postupci.append('\t'.join([zahvat, nadlezan, link]))
     return postupci
 
