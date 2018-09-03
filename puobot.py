@@ -17,7 +17,7 @@ import requests
 from bs4 import BeautifulSoup
 
 
-BASE_URL = 'http://puo.mzoip.hr/hr/'
+BASE_URL = 'http://puo.mzoe.hr/hr/'
 IMENA_POSTUPAKA = ['puo', 'puo_pg', 'opuo', 'spuo_min', 'spuo_pg', 'spuo_jlrs', 'ospuo']
 
 
@@ -147,7 +147,7 @@ def parse_postupaka(postupak):
         list: detaljni (godina, ime, kategorija, link) popis svih postupaka.
     """
     link_elem = trazenje_postupaka(postupak)
-    url = 'http://puo.mzoip.hr'
+    url = 'http://puo.mzoe.hr'
     output = []
     for godina in link_elem:
         print(godina.text.strip())

@@ -23,7 +23,7 @@ import scraperwiki
 def puoscrape(urlname, postupak='puo'):
     r = requests.get(urlname)
 
-    url = 'http://puo.mzoip.hr'
+    url = 'http://puo.mzoe.hr'
     if postupak == 'puo':
         pattern = re.compile('PUO postupci 2[0-9]{3}')
     elif postupak == 'opuo':
@@ -74,7 +74,7 @@ def puoscrape_alt(urlname):
     return output
 
 
-BASE_URL = 'http://puo.mzoip.hr/hr/'
+BASE_URL = 'http://puo.mzoe.hr/hr/'
 
 def trazenje(postupak):
     print('tražim {} postupke...'.format(postupak.upper()))
